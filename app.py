@@ -16,35 +16,38 @@ db = SQLAlchemy(app)
 
 
 # Models and relationships
-
+# see also https://dev.to/jimgrimes86/flask-sqlalchemy-many-to-many-relationships-association-tables-and-association-objects-3aej
 class RepositoryEnum(enum.Enum):
     zenodo = 'Zenodo'
     osf = 'OSF'
     openneuro = 'Open Neuro'
 
+authorship = db.Table('dataset_author',
+                    db.Column('dataset_id', db.Integer, db.ForeignKey('datasets.id')),
+                    db.Column('author_id', db.Integer, db.ForeignKey('authors.id'))
+                    )
+
 class Dataset(db.Model):
-
-
-
     __tablename__="datasets"
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime)
     title = db.Column(db.String(250), nullable=False)
     DOI = db.Column(db.String(250))
     Repository = db.Column(db.Enum(RepositoryEnum),default=RepositoryEnum.osf)
-#    authors=db.relationship("Author",backref="datasets")
+    authors=db.relationship("Author", secondary=authorship, backref="datasets")
     def __repr__(self):
         return f'<Dataset: "{self.title}">'
     
-#class Author(db.Model):
-#    __tablename__="authors"
-#    id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(250), nullable=False)
-#   #email = db.Column(db.String(120), unique=True, nullable=False)
-#    orcid = db.Column(db.String(19), unique=True, nullable=False)
-#    def __repr__(self):
-#        return '<User %r>' % self.name
-    
+class Author(db.Model):
+    __tablename__="authors"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    orcid = db.Column(db.String(19), unique=True, nullable=False)
+    def __repr__(self):
+        return '<User %r>' % self.name
+
+
 
 # VIEWS
 
