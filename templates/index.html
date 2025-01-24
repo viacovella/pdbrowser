@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h2>There are currently {{ndsets}} public datasets </h2>
+
+    <div class="content">
+        {% for dataset in datasets %}
+
+        <div class = "dataset">
+
+                <p>{{dataset.title}}</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p><a href="{{dataset.DOI}}">Browse the data on {{dataset.Repository.value}}</a></p>
+
+        </div>
+
+        {% endfor %}
+    </div>
+
+{% endblock %}
