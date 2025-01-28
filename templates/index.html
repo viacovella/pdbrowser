@@ -11,7 +11,14 @@
 
                 <p>{{dataset.title}}</p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <div class = "authors"> 
+                    {% for da in dataset.authors %}
+                    <a href="{{ url_for('author', author_id=da.id)}}">{{da.name}}</a> 
+                    {% endfor %}
+
+                </div>
                 <p><a href="{{dataset.DOI}}">Browse the data on {{dataset.Repository.value}}</a></p>
+
 
         </div>
 

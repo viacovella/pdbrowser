@@ -19,6 +19,8 @@ d2=Dataset(timestamp=datetime(2021,2,18),title="Psychological correlates of brai
 d3=Dataset(timestamp=datetime(2023,7,30),title="Social psychology dataset", DOI="doi.org/10.1234.5", Repository=RepositoryEnum.zenodo)
 
 d1.authors.append(a1)
+d2.authors.append(a1)
+d1.authors.append(a2)
 
 [db.session.add(d) for d in [d1,d2,d3]]
 db.session.commit()

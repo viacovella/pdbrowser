@@ -17,6 +17,7 @@ db = SQLAlchemy(app)
 
 # Models and relationships
 # see also https://dev.to/jimgrimes86/flask-sqlalchemy-many-to-many-relationships-association-tables-and-association-objects-3aej
+
 class RepositoryEnum(enum.Enum):
     zenodo = 'Zenodo'
     osf = 'OSF'
@@ -26,6 +27,7 @@ authorship = db.Table('dataset_author',
                     db.Column('dataset_id', db.Integer, db.ForeignKey('datasets.id')),
                     db.Column('author_id', db.Integer, db.ForeignKey('authors.id'))
                     )
+
 
 class Dataset(db.Model):
     __tablename__="datasets"
@@ -56,3 +58,9 @@ def index():
     ndsets = Dataset.query.count()
     datasets = Dataset.query.all()
     return render_template('index.html', ndsets=ndsets, datasets=datasets)
+
+
+@app.route('/author/<int:author_id>/')
+def author(author_id):
+    author = Author.query.get_or_404(author_id)
+    return render_template('author.html', author=author)
