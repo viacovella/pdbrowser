@@ -4,6 +4,9 @@
 <div class=""author>
 
     <h2>{{ author.name }}</h2>
+    {% for ad in author.datasets %}
+    {{ad.title}}
+    {% endfor %}
     
     
 </div>

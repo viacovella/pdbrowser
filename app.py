@@ -36,7 +36,7 @@ class Dataset(db.Model):
     title = db.Column(db.String(250), nullable=False)
     DOI = db.Column(db.String(250))
     Repository = db.Column(db.Enum(RepositoryEnum),default=RepositoryEnum.osf)
-    authors=db.relationship("Author", secondary=authorship, backref="datasets")
+    authors=db.relationship("Author", secondary=authorship, back_populates="datasets")
     def __repr__(self):
         return f'<Dataset: "{self.title}">'
     
@@ -46,6 +46,7 @@ class Author(db.Model):
     name = db.Column(db.String(250), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     orcid = db.Column(db.String(19), unique=True, nullable=False)
+    datasets = db.relationship("Dataset", secondary=authorship, back_populates="authors")
     def __repr__(self):
         return '<User %r>' % self.name
 
@@ -64,3 +65,20 @@ def index():
 def author(author_id):
     author = Author.query.get_or_404(author_id)
     return render_template('author.html', author=author)
+
+@app.route('/author/create/', methods=['POST'])
+def acreate():
+    request_data = request.get_json()
+
+       
+    if request_data:
+        aname=request_data['name']
+        aemail=request_data['email']
+        aorcid=request_data['orcid']
+
+    aauthor = Authos(name=aname,email=aemail,orcid=aorcid)
+    db.session.add(aauthor)
+    db.session.commit()
+    
+    return '''
+           Created author:{} sent in a submission with orcid {}'''.format(aname,aorcid)
